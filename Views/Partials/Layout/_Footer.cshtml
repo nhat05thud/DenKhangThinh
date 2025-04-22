@@ -1,0 +1,44 @@
+﻿@using DenKhangThinh.Helpers;
+@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var logoFooter = home?.Value<IPublishedContent>("logoFooter");
+    var privacy = home?.DescendantOfType("privacy");
+    var n = 1;
+}
+
+<footer id="footer">
+    <div class="footer-logo text-center">
+        <a href="@home?.Url()"><img src="@(logoFooter != null ? logoFooter.Url() : "https://placehold.co/250x57")" alt="Khang Thinh Interiors" /></a>
+    </div>
+    @if (privacy != null)
+    {
+        <div class="flex justify-center">
+            <div class="footer-items flex flex-wrap justify-around w-992">
+                @foreach (var item in privacy.Children().Take(3))
+                {
+                    <div class="item w-4/12 text-center">
+                        <a href="@item.Url()">@item.Name</a>
+                    </div>
+                    n++;
+                }
+            </div>
+        </div>
+    }
+    @{
+        var socialMedias = home?.Value<IEnumerable<IPublishedElement>>("socialMedias") ?? null;
+    }
+    @if (socialMedias != null && socialMedias.Any())
+    {
+        <div class="social text-center">
+            @foreach (var item in socialMedias)
+            {
+                <a href="@item.Value("link")" title="@item.Value("title")" target="_blank">
+                    <our-svg media-item="@(item.Value<MediaWithCrops>("svg"))" class="social-svg" ensure-viewbox="true" cache="true" cache-minutes="180" ignore-appsettings="true" />
+                </a>
+            }
+        </div>
+    }
+</footer>

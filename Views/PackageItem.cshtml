@@ -1,0 +1,6 @@
+﻿@using DenKhangThinh.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+}
+@await Html.PartialAsync("Package/_PackageItem", new PackageViewModel { IsPackage = false, Data = Model })

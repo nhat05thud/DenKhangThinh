@@ -1,0 +1,15 @@
+﻿@using DenKhangThinh.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var lstProducts = home?.DescendantsOfType("product").OrderBy(x => x.CreateDate).Take(6) ?? null;
+}
+@if (lstProducts != null && lstProducts.Any())
+{
+    <div class="main-products-slide owl-carousel">
+        @foreach (var item in lstProducts)
+        {
+            @await Html.PartialAsync("Layout/_ProductItem", new ProductViewModel { IsHome = true, IsFullWidth = true, Data = item })
+        }
+    </div>
+}

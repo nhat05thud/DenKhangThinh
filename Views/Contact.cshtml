@@ -1,0 +1,21 @@
+﻿@using DenKhangThinh.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+}
+<div class="contact-info">
+    <div class="flex flex-wrap justify-center w-full">
+        <div class="maps">
+            @Html.Raw(Model.Value("googleMaps"))
+        </div>
+        <div class="info wrap-main-info justify-center not-scale-image-left">
+            @Model.Value("contactInfo")
+        </div>
+    </div>
+</div>
+<div class="contact-form">
+    <h2 class="text-center">@Model.Value("formTitle")</h2>
+    <div class="custom__width w-820">
+        @await Html.PartialAsync("Contact/_Contact", new ContactModel { CultureLcid = System.Globalization.CultureInfo.CurrentUICulture.LCID, PageId = Model.Id })
+    </div>
+</div>

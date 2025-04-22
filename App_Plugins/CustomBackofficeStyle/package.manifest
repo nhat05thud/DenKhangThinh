@@ -1,0 +1,7 @@
+{
+    "name": "CustomBackofficeStyle",
+    "version": "1.0.0.0",
+    "css": [
+        "~/App_Plugins/CustomBackofficeStyle/style.css"
+    ]
+}

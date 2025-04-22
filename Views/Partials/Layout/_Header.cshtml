@@ -1,0 +1,65 @@
+﻿@using DenKhangThinh.Helpers;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var logo = home?.Value<IPublishedContent>("logo");
+    var lstNav = home?.Children()?.Where(x => x.ContentType.Alias != "privacy" && x.ContentType.Alias != "packages" && x.ContentType.Alias != "search") ?? null;
+    var searchPage = home?.DescendantOfType("search");
+}
+
+<header id="header">
+    <div class="top-head flex flex-wrap justify-between items-center">
+        <div class="logo">
+            <a href="@home?.Url()"><img src="@(logo != null ? logo.Url() : "https://placehold.co/250x57")" alt="" /></a>
+        </div>
+        <div class="search">
+            @if (searchPage != null)
+            {
+                <form action="@(searchPage.Url(mode: UrlMode.Absolute))" method="get">
+                    <input type="text" name="keyword" class="search-text" placeholder="Từ khóa tìm kiếm..." />
+                    <button type="submit" class="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                </form>
+            }
+        </div>
+        <div class="hotline">
+            <a href="tel:0978897579">0978897579</a> - <a href="tel:02256533618">02256533618</a>
+        </div>
+    </div>
+    <div class="right-header flex flex-wrap justify-center">
+        <div class="wrap-menu">
+            <ul id="menu" class="reset-liststyle flex flex-wrap justify-between">
+                @if (lstNav != null)
+                {
+                    foreach (var item in lstNav)
+                    {
+                        <li class="@(item.IsAncestorOrSelf(Umbraco.AssignedContentItem) ? "active" : "")">
+                            <a href="@item.Url()">@item.Name</a>
+                            @if (item.Children?.Count() > 0)
+                            {
+                                <ul>
+                                    @foreach (var cate in item.Children())
+                                    {
+                                        <li><a href="@cate.Url()">@cate.Name</a></li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <a class="panel-a menu-mo"
+           href="#menumobile"
+           data-position="true"
+           data-type="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+    </div>
+</header>

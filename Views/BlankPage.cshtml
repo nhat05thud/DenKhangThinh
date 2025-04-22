@@ -1,0 +1,26 @@
+﻿@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var banner = Model.Value<IPublishedContent>("banner");
+}
+@if (banner != null)
+{
+    <div class="about-banner">
+        <img src="@(banner.GetCropUrl(1920,400, imageCropMode: ImageCropMode.Crop, furtherOptions: "&slimmage=true"))" alt="@Model.Name">
+    </div>
+}
+else
+{
+    <div class="about-banner">
+        <img src="https://placehold.co/1920x400" alt="@Model.Name">
+    </div>
+}
+<div class="mgb-30"></div>
+<div class="container">
+    <h1 class="blog-title">@Model.Name</h1>
+    <div class="wrap-content">
+        @Model.Value("content")
+    </div>
+</div>
+<div class="mgb-30"></div>

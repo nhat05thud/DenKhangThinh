@@ -1,0 +1,9 @@
+﻿@using Umbraco.Cms.Core.Models;
+@using DenKhangThinh.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+}
+<h1 class="hidden-h1">@(home?.Value("metaTitle") ?? "Nội thất khang thịnh")</h1>
+@await Html.PartialAsync("Category/_CategoryItem", new CategoryViewModel { IsCategory = true, Data = Model})

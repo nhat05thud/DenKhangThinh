@@ -1,0 +1,66 @@
+﻿@using DenKhangThinh.Helpers
+@using DenKhangThinh.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<PackageViewModel>
+@{
+    var lstPackages = Model.IsPackage ? Model.Data?.Children() : Model.Data?.Parent?.Children();
+    var mainImage = Model.IsPackage ? Model.Data?.Descendant()?.Value<IEnumerable<IPublishedContent>>("mainImage") : Model.Data?.Value<IEnumerable<IPublishedContent>>("mainImage");
+}
+
+<div class="container">
+    <div class="package-page">
+        <h1 class="text-center">@(Model.IsPackage ? Model.Data?.Name : Model.Data?.Parent?.Name)</h1>
+        <div class="cate-list text-center">
+            @if (lstPackages != null)
+            {
+                foreach (var item in lstPackages)
+                {
+                    <a class="@(item.IsAncestorOrSelf(Umbraco.AssignedContentItem) ? "active" : "")" href="@item.Url()">@item.Name</a>
+                }
+            }
+        </div>
+        <div class="package-image">
+            @if (mainImage != null && mainImage.Any())
+            {
+                @foreach (var img in mainImage)
+                {
+                    <div class="w-full">
+                        <a href="@img.Url()" data-fancybox="gallery">
+                            <img src="@(img.Url())" class="w-full" alt="@(Model.IsPackage ? Model.Data?.Descendant()?.Name : Model.Data?.Name)" />
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+        @{
+            decimal total = 0;
+            var sale = Model.IsPackage ? Model.Data?.Value<int>("sale") : Model.Data?.Parent?.Value<int>("sale");
+            var lstProductPicker = Model.IsPackage ? Model.Data?.Descendant()?.Value<IEnumerable<IPublishedContent>>("productPicker") : Model.Data?.Value<IEnumerable<IPublishedContent>>("productPicker");
+        }
+        <div class="product-list flex flex-wrap">
+            @if (lstProductPicker != null)
+            {
+                foreach (var item in lstProductPicker)
+                {
+                    total += item.Value<decimal>("price");
+                    @await Html.PartialAsync("Layout/_ProductItem", new ProductViewModel { IsHome = false, Data = item })
+                }
+            }
+        </div>
+        <div class="total-package-price">
+            <div class="item flex justify-between">
+                <span>Tổng chi phí</span>
+                <span>@Utils.ToVnd(total)</span>
+            </div>
+            <div class="item flex justify-between">
+                <span>Giảm giá</span>
+                <span>-@sale%</span>
+            </div>
+            <div class="item flex justify-between">
+                <span>Tổng</span>
+                <span>@Utils.ToVnd(total - (total * sale / 100))</span>
+            </div>
+        </div>
+        @await Html.PartialAsync("Layout/_ZaloSupport", Model.Data)
+    </div>
+</div>

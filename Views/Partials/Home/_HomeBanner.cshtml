@@ -1,0 +1,23 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var banners = Model.Value<IEnumerable<IPublishedContent>>("banners");
+}
+@if (banners != null && banners.Any())
+{
+    <div id="main-banner" class="base_overflow full_width">
+        <div class="cust-slider">
+            @foreach (var item in banners)
+            {
+                <div class="c-s-img" style="background-image: url(@(item.Url()));"></div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div id="main-banner" class="base_overflow full_width">
+        <div class="cust-slider">
+            <div class="c-s-img" style="background-image: url(https://placehold.co/1920x1080);"></div>
+        </div>
+    </div>
+}

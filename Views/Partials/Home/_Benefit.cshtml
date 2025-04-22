@@ -1,0 +1,25 @@
+﻿@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var benefit = home?.Value<IEnumerable<IPublishedElement>>("benefit") ?? null;
+}
+@if (benefit != null && benefit.Any())
+{
+    <div class="main-benefit">
+        <div class="container">
+            <div class="benefit-items flex flex-wrap justify-between">
+                @foreach (var item in benefit)
+                {
+                    <div class="item text-center w-3/12">
+                        <div class="img">
+                            <our-svg media-item="@(item.Value<MediaWithCrops>("svg"))" class="benefit-svg" ensure-viewbox="true" cache="true" cache-minutes="180" ignore-appsettings="true" />
+                        </div>
+                        <p>@item.Value("title")</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

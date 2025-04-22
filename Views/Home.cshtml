@@ -1,0 +1,13 @@
+﻿@using DenKhangThinh.Models
+@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+}
+<h1 class="hidden-h1">@(home?.Value("metaTitle") ?? "")</h1>
+@await Html.PartialAsync("Home/_HomeBanner")
+@await Html.PartialAsync("Home/_HighLightProducts")
+@await Html.PartialAsync("Home/_Categories")
+@await Html.PartialAsync("Home/_Packages")
+@await Html.PartialAsync("Home/_Benefit")

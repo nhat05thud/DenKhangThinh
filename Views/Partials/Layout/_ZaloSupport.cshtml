@@ -1,0 +1,11 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models;
+@using DenKhangThinh.Helpers;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPublishedContent>
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+}
+<div class="contact-phone">
+    <span class="phone-icon"><img src="/images/phone.svg" alt="phone" />@home?.Value("zaloNumber")</span>
+    <span>Zalo</span>
+</div>

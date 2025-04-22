@@ -1,0 +1,74 @@
+﻿@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using DenKhangThinh.Models;
+@using DenKhangThinh.Helpers;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ProductViewModel>
+
+@if (Model.Data != null)
+{
+    var img = Model.Data?.Value<IPublishedContent>("image");
+    var productColors = Model.Data?.Value<IEnumerable<IPublishedElement>>("productColors") ?? null;
+    var productMaterials = Model.Data?.Value<IEnumerable<IPublishedElement>>("productMaterials") ?? null;
+    var isOutOfStock = Model.Data?.Value<bool>("isOutOfStock") == true;
+    var materialStr = String.Empty;
+    <div class="item @(!Model.IsFullWidth ? Model.ColumnWitdh : "")">
+        <div class="product-item">
+            @if (Model.IsHome)
+            {
+                <div class="cate"><a href="@Model.Data?.Parent?.Url()">@Model.Data?.Parent?.Name</a></div>
+            }
+            <div class="img text-center">
+                <a href="@Model.Data?.Url()">
+                    <img src="@(img != null ? img.GetCropUrl(350, 200, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/350x200")" alt="@Model.Data?.Name" />
+                </a>
+            </div>
+            <div class="content">
+                <a href="@Model.Data?.Url()">@Model.Data?.Name</a>
+                <ul class="reset-liststyle">
+                    <li class="flex flex-wrap">
+                        <p>Màu sắc</p>
+                        @if (productColors != null && productColors.Any())
+                        {
+                            <div class="color-list">
+                                @foreach (var color in productColors)
+                                {
+                                    <span style="background-color: @color.Value("color")"></span>
+                                }
+                            </div>
+                        }
+                    </li>
+                    <li class="flex flex-wrap">
+                        <p>Chất liệu</p>
+                        @if (productMaterials != null && productMaterials.Any())
+                        {
+                            foreach (var item in productMaterials)
+                            {
+                                materialStr += item.Value("title") + ", ";
+                            }
+                            materialStr = materialStr.TrimEnd(", ");
+                        }
+                        <span>@materialStr</span>
+                    </li>
+                    <li class="flex flex-wrap">
+                        <p>Tình trạng</p>
+                        <span style="color: @(isOutOfStock ? "red" : "green");">@(isOutOfStock ? "Hết hàng" : "Còn hàng")</span>
+                    </li>
+                </ul>
+                <div class="price flex flex-wrap text-center">
+                    @if (Model.Data?.Value<decimal>("oldPrice") > 0)
+                    {
+                        <div class="price-item old-price">@Utils.ToVnd(Model.Data?.Value<decimal>("oldPrice"))</div>
+                    }
+                    @if (Model.Data?.Value<int>("sale") > 0)
+                    {
+                        <div class="promotion">-@(Model.Data?.Value<int>("sale"))%</div>
+                    }
+                    @if (Model.Data?.Value<decimal>("price") > 0)
+                    {
+                        <div class="price-item new-price">@Utils.ToVnd(Model.Data?.Value<decimal>("price"))</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,20 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var packages = home?.DescendantOfType("packages");
+}
+@if (packages != null)
+{
+    var lstPackage = packages.Children();
+    if (lstPackage != null && lstPackage.Any())
+    {
+        var item = @lstPackage.First() ?? null;
+        if (item != null)
+        {
+            var img = item?.Value<IPublishedContent>("image");
+            <div class="main-packages">
+                @await Html.PartialAsync("Layout/_PackageItem", item)
+            </div>
+        }
+    }
+}

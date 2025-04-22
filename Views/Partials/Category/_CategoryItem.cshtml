@@ -1,0 +1,45 @@
+﻿@using Umbraco.Cms.Core.Models;
+@using DenKhangThinh.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<CategoryViewModel>
+@{
+    var banner = Model.IsCategory ? Model.Data.Value<IPublishedContent>("banner") : Model.Data.Parent.Value<IPublishedContent>("banner");
+}
+<div class="cate-banner">
+    <div class="item flex flex-wrap mgb-30">
+        <div class="banner-image w-8/12"
+             style="background-image: url('@(banner != null ? banner.GetCropUrl(500, 300, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/1000x450")')"></div>
+        <div class="banner-text w-4/12 flex justify-center align-item-end">
+            <div class="content">
+                <h2 class="text-uppercase">@(Model.IsCategory ? Model.Data?.Name : Model.Data?.Parent?.Name)</h2>
+                <div class="desc">
+                    @(Model.IsCategory ? Model.Data?.Value("description") : Model.Data?.Parent?.Value("description"))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    var lstType = Model.IsCategory ? Model.Data?.Children() : Model.Data?.Parent?.Children();
+    var lstProducts = Model.IsCategory ? Model.Data?.Descendant()?.Children() : Model.Data?.Children();
+}
+<div class="container">
+    <div class="cate-list text-center">
+        @if (lstType != null)
+        {
+            foreach (var item in lstType)
+            {
+                <a class="@(item.IsAncestorOrSelf(Umbraco.AssignedContentItem) ? "active" : "")" href="@item.Url()">@item.Name</a>
+            }
+        }
+    </div>
+    <div class="product-list flex flex-wrap">
+        @if (lstProducts != null)
+        {
+            foreach (var item in lstProducts)
+            {
+                @await Html.PartialAsync("Layout/_ProductItem", new ProductViewModel { IsHome = false, Data = item })
+            }
+        }
+    </div>
+</div>

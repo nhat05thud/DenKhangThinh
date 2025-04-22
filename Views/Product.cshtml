@@ -1,0 +1,126 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models;
+@using DenKhangThinh.Helpers;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var relatedImages = Model.Value<IEnumerable<IPublishedContent>>("relatedImages") ?? null;
+}
+
+<div class="container">
+    <div class="product-page">
+        @if (relatedImages != null && relatedImages.Any())
+        {
+            <div class="main-product-slide owl-carousel">
+                @foreach (var item in relatedImages)
+                {
+                    <div class="item">
+                        <img src="@(item != null ? item.GetCropUrl(1250, 500, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/1250x500")" alt="@Model.Name" />
+                    </div>
+                }
+            </div>
+        }
+        <div class="detail-images flex flex-wrap align-item-center">
+            <div class="item w-6/12">
+                @if (relatedImages != null && relatedImages.Any())
+                {
+                    <div class="detail-product-slide owl-carousel">
+                        @foreach (var item in relatedImages)
+                        {
+                            <div class="item">
+                                <img src="@(item != null ? item.GetCropUrl(100, 100, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/100x100")" alt="@Model.Name" />
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="item w-6/12">
+                <div class="price flex flex-wrap text-center">
+                    @if (Model.Value<decimal>("oldPrice") > 0)
+                    {
+                        <div class="price-item old-price">@Utils.ToVnd(Model.Value<decimal>("oldPrice"))</div>
+                    }
+                    @if (Model.Value<int>("sale") > 0)
+                    {
+                        <div class="promotion">-@(Model.Value<int>("sale"))%</div>
+                    }
+                    @if (Model.Value<decimal>("price") > 0)
+                    {
+                        <div class="price-item new-price">@Utils.ToVnd(Model.Value<decimal>("price"))</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="detail-product-content flex flex-wrap">
+            <div class="item left w-6/12">
+                <div class="product-info">
+                    <h1>@Model.Name</h1>
+                    <div class="desc">
+                        @Model.Value("description")
+                    </div>
+                </div>
+                <div class="product-size">
+                    <h2>Thông số kích thước và cân nặng</h2>
+                    @{
+                        var productSizes = Model.Value<IEnumerable<IPublishedElement>>("productSizes") ?? null;
+                    }
+                    @if (productSizes != null && productSizes.Any())
+                    {
+                        <ul class="reset-liststyle flex flex-wrap">
+                            @foreach (var item in productSizes)
+                            {
+                                <li><span>@item.Value("title"):</span>@item.Value("value")</li>
+                            }
+                        </ul>
+                    }
+                </div>
+                <div class="product-material">
+                    <h2>Chất liệu</h2>
+                    @{
+                        var productMaterials = Model.Value<IEnumerable<IPublishedElement>>("productMaterials") ?? null;
+                    }
+                    @if (productMaterials != null && productMaterials.Any())
+                    {
+                        <div class="material-list">
+                            @foreach (var item in productMaterials)
+                            {
+                                var images = item.Value<IEnumerable<IPublishedContent>>("images");
+                                <div class="item">
+                                    <h3>@item.Value("title")</h3>
+                                    <div class="desc">
+                                        @item.Value("description")
+                                    </div>
+                                    @if (images != null && images.Any())
+                                    {
+                                        <div class="list-material-images flex flex-wrap">
+                                            @foreach (var img in images)
+                                            {
+                                                <a href="@img.Url()">
+                                                    <img src="@(img != null ? img.GetCropUrl(100, 100, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/100x100")"
+                                                         class="w-full"
+                                                         alt="@item.Value("title")" />
+                                                </a>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="item right w-6/12">
+                @{
+                    var imageDetail = Model.Value<IPublishedContent>("imageDetail");
+                }
+                <h4>Tư vấn chi tiết</h4>
+                @await Html.PartialAsync("Layout/_ZaloSupport", Model)
+                @if (imageDetail != null)
+                {
+                    <a href="@imageDetail.Url()">
+                        <img src="@(imageDetail.GetCropUrl(500, 500, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true"))" class="w-full" alt="@Model.Name" />
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

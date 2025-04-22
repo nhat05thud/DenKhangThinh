@@ -1,0 +1,7 @@
+﻿.umb-app-header__logo
+{
+    display: none !important;
+}
+.mce-fullscreen umb-editor-tab-bar ~ div .umb-rte .mce-top-part {
+    top: 0 !important;
+}

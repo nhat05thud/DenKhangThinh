@@ -1,0 +1,10 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+}
+<div class="main-packages">
+    @foreach (var item in Model.Children())
+    {
+        @await Html.PartialAsync("Layout/_PackageItem", item)
+    }
+</div>

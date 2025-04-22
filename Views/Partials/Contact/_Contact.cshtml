@@ -1,0 +1,41 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<DenKhangThinh.Models.ContactModel>
+@{
+}
+
+<form id="contact-form">
+    @Html.AntiForgeryToken()
+    <div class="form-content">
+        @await Html.PartialAsync("Contact/_Form", Model)
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.validator.unobtrusive.parse($("#contact-form"));
+    });
+
+    function ajaxContactFormSubmit() {
+        if ($("#contact-form").valid()) {
+            addLoadSpinner();
+            var formData = $("#contact-form").serialize();
+
+            $.ajax({
+                url: "@Url.Action("HandleContactForm", "Contact")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    removeLoadSpinner();
+                    $("#contact-form .form-content").html(response.returnView.result);
+                    if (response.success) {
+                        toastr.success(response.responseMessage, response.responseType);
+                    }
+                    else {
+                        toastr.error(response.responseMessage, response.responseType);
+                    }
+                },
+                error: function () {
+                    toastr.error("Gửi mail không thành công", "Thất bại");
+                }
+            });
+        }
+    }
+</script>

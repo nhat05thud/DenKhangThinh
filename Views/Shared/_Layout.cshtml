@@ -1,0 +1,43 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var favicon = home?.Value<IPublishedContent>("favicon");
+}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="@(favicon != null ? favicon.Url() : "/favicon.ico")">
+    @await Html.PartialAsync("Layout/_Shared")
+    <environment names="Development">
+        <link rel="stylesheet" href="/css/owl.carousel.min.css" />
+        <link rel="stylesheet" href="/css/fancybox.css" />
+        <link rel="stylesheet" href="/css/fonts.css" />
+        <link rel="stylesheet" href="/css/site.css" />
+    </environment>
+    <environment include="Release,Production,Staging">
+        <link rel="stylesheet" href="/bundles/site.min.css" />
+    </environment>
+    <script src="/scripts/jquery.min.js"></script>
+  </head>
+  <body>
+    @await Html.PartialAsync("Layout/_Header")
+    @RenderBody()
+    @await Html.PartialAsync("Layout/_Footer")
+
+    <environment names="Development">
+        <script src="/scripts/jquery.validate.min.js"></script>
+        <script src="/scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="/scripts/fancybox.umd.js"></script>
+        <script src="/scripts/owl.carousel.min.js"></script>
+        <script src="/scripts/jquery.lazy.min.js"></script>
+        <script src="/scripts/main.js"></script>
+    </environment>
+    <environment include="Release,Production,Staging">
+        <script src="/bundles/site.min.js"></script>
+    </environment>
+    @RenderSection("script", false)
+  </body>
+</html>

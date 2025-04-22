@@ -1,0 +1,29 @@
+﻿@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using DenKhangThinh.Models;
+@using DenKhangThinh.Helpers;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPublishedContent?>
+@{
+    var img = Model?.Value<IPublishedContent>("image");
+}
+<div class="item mgb-30">
+    <a href="@Model?.Url()" class="flex flex-wrap">
+        <div class="package-info w-4/12 flex justify-center align-item-center">
+            <div class="content text-center text-uppercase">
+                <span class="tag">Trọn gói nội thất</span>
+                <h3>@Model?.Value("packageType")</h3>
+                <h2>@Model?.Value("packageName")</h2>
+                @if (Model?.Value<int>("sale") > 0)
+                {
+                    <div class="flex justify-center">
+                        <div class="sale flex flex-wrap justify-center align-item-center">
+                            <div class="content">-@Model?.Value("sale")%<span>off</span></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="package-image w-8/12"
+             style="background-image: url('@(img != null ? img.GetCropUrl(1000, 450, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/1000x450")')"></div>
+    </a>
+</div>

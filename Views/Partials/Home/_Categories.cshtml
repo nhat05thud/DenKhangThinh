@@ -1,0 +1,30 @@
+﻿@using DenKhangThinh.Models
+@using Umbraco.Cms.Core.Models;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Umbraco.AssignedContentItem.Root();
+    var categories = home?.Children()?.Where(x => x.ContentType.Alias == "category");
+}
+@if (categories != null && categories.Any())
+{
+    <div class="main-categories">
+        @foreach (var item in categories)
+        {
+            var img = item.Value<IPublishedContent>("image");
+            var lstProducts = item.DescendantsOfType("product").OrderBy(x => x.CreateDate).Take(4) ?? new List<IPublishedContent>();
+            <div class="wrap-item">
+                <div class="category-head flex flex-wrap justify-between items-center">
+                    <h2>@item.Name</h2>
+                    <a href="@item.Url()">Xem tất cả</a>
+                </div>
+                <div class="list-product">
+                    @foreach (var product in lstProducts)
+                    {
+                        @await Html.PartialAsync("Layout/_ProductItem", new ProductViewModel { IsHome = true, ColumnWitdh = "w-3/12", Data = product })
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
