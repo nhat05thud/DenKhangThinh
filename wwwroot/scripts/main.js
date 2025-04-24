@@ -16,13 +16,14 @@ $(window).on("resize", function () {
     $(".wrap-menu").attr("style", "");
     $(".menu-mo").removeClass("open");
   } else {
-    $(".wrap-menu").css("display", "none");
+      $(".wrap-menu").removeClass("open");
+    $(".wrap-menu").css("right", "");
   }
 });
 $(".menu-mo").click(function (e) {
   e.preventDefault();
-  $(this).toggleClass("open");
-  $(".wrap-menu").stop(true, false, true).slideToggle(500);
+    $(this).stop(true, false, true).toggleClass("open");
+    $(".wrap-menu").stop(true, false, true).toggleClass("open");
 });
 
 function initOwlCarousel() {

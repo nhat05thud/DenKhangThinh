@@ -1,3 +1,5 @@
+using DenKhangThinh.Configuration;
+
 namespace DenKhangThinh;
 
 public class Startup
@@ -34,6 +36,8 @@ public class Startup
             .AddWebsite()
             .AddComposers()
             .Build();
+
+        services.Configure<SiteConfig>(_config.GetSection(SiteConfig.SectionName));
     }
 
     /// <summary>

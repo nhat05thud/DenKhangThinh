@@ -19,18 +19,18 @@ public class DotLiquidTemplate : ITextTemplate
         var templateFile = Path.Combine(TemplateDir, $"{templateName}.html");
         var templateFileCulture = Path.Combine(TemplateDir, $"{templateName}.html");
 
-        if (File.Exists(templateFileCulture))
+        if (System.IO.File.Exists(templateFileCulture))
         {
             templateFile = templateFileCulture;
         }
-        else if (!File.Exists(templateFile))
+        else if (!System.IO.File.Exists(templateFile))
         {
             throw new FileNotFoundException($"TemplateName {templateName} not found.");
         }
 
-        var liquidTemplate = File.ReadAllText(templateFile, Encoding.UTF8);
+        var liquidTemplate = System.IO.File.ReadAllText(templateFile, Encoding.UTF8);
 
-        var template = Template.Parse(liquidTemplate);
+        var template = DotLiquid.Template.Parse(liquidTemplate);
         try
         {
             return template.Render(Hash.FromAnonymousObject(model));

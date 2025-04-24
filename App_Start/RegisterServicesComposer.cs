@@ -10,5 +10,6 @@ public class RegisterServicesComposer : IComposer
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddScoped<IDataTypeValueService, DataTypeValueService>();
         builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
+        builder.Services.AddTransient<ISearchService, SearchService>();
     }
 }

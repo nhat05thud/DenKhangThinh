@@ -18,7 +18,7 @@
                     <h2>@item.Name</h2>
                     <a href="@item.Url()">Xem tất cả</a>
                 </div>
-                <div class="list-product">
+                <div class="list-product flex flex-wrap">
                     @foreach (var product in lstProducts)
                     {
                         @await Html.PartialAsync("Layout/_ProductItem", new ProductViewModel { IsHome = true, ColumnWitdh = "w-3/12", Data = product })

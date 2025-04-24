@@ -11,33 +11,37 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="@(favicon != null ? favicon.Url() : "/favicon.ico")">
     @await Html.PartialAsync("Layout/_Shared")
-    <environment names="Development">
-        <link rel="stylesheet" href="/css/owl.carousel.min.css" />
-        <link rel="stylesheet" href="/css/fancybox.css" />
-        <link rel="stylesheet" href="/css/fonts.css" />
-        <link rel="stylesheet" href="/css/site.css" />
-    </environment>
-    <environment include="Release,Production,Staging">
-        <link rel="stylesheet" href="/bundles/site.min.css" />
-    </environment>
-    <script src="/scripts/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/css/fancybox.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/site.css" />
   </head>
   <body>
     @await Html.PartialAsync("Layout/_Header")
     @RenderBody()
     @await Html.PartialAsync("Layout/_Footer")
-
-    <environment names="Development">
-        <script src="/scripts/jquery.validate.min.js"></script>
-        <script src="/scripts/jquery.validate.unobtrusive.min.js"></script>
-        <script src="/scripts/fancybox.umd.js"></script>
-        <script src="/scripts/owl.carousel.min.js"></script>
-        <script src="/scripts/jquery.lazy.min.js"></script>
-        <script src="/scripts/main.js"></script>
-    </environment>
-    <environment include="Release,Production,Staging">
-        <script src="/bundles/site.min.js"></script>
-    </environment>
+    <a class="btn-zalo btn-frame text-decoration-none" target="_blank" href="@home?.Value("zaloLink")">
+        <div class="animated infinite zoomIn kenit-alo-circle"></div>
+        <div class="animated infinite pulse kenit-alo-circle-fill"></div>
+        <i><img src="/images/zl.png" alt="Zalo"></i>
+    </a>
+    <a class="btn-phone btn-frame text-decoration-none" href="tel:@home?.Value("phoneNumber")">
+        <div class="animated infinite zoomIn kenit-alo-circle"></div>
+        <div class="animated infinite pulse kenit-alo-circle-fill"></div>
+        <i><img src="/images/hl.png" alt="Hotline"></i>
+    </a>
+    <a class="btn-messenger btn-frame text-decoration-none" href="@home?.Value("facebookMessenger")" target="_blank">
+        <div class="animated infinite zoomIn kenit-alo-circle"></div>
+        <div class="animated infinite pulse kenit-alo-circle-fill"></div>
+        <i><svg id="fb-msng-icon" data-name="messenger icon" xmlns="//www.w3.org/2000/svg" viewBox="0 0 30.47 30.66"><path d="M29.56,14.34c-8.41,0-15.23,6.35-15.23,14.19A13.83,13.83,0,0,0,20,39.59V45l5.19-2.86a16.27,16.27,0,0,0,4.37.59c8.41,0,15.23-6.35,15.23-14.19S38,14.34,29.56,14.34Zm1.51,19.11-3.88-4.16-7.57,4.16,8.33-8.89,4,4.16,7.48-4.16Z" transform="translate(-14.32 -14.34)" style="fill:#fff"></path></svg></i>
+    </a>
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/jquery.validate.min.js"></script>
+    <script src="/scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="/scripts/fancybox.umd.js"></script>
+    <script src="/scripts/owl.carousel.min.js"></script>
+    <script src="/scripts/jquery.lazy.min.js"></script>
+    <script src="/scripts/main.js"></script>
     @RenderSection("script", false)
   </body>
 </html>

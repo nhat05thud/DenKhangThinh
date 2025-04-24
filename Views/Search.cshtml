@@ -1,5 +1,33 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+﻿@using DenKhangThinh.Models;
+@using Umbraco.Cms.Core.Models;
+@inherits UmbracoViewPage<SearchPageContentModel>
 @{
-    var searchQuery = Context.Request.Query["keyword"];
+    var home = Umbraco.AssignedContentItem.Root();
+    var searchPage = (Search)Model.Content;
+    var banner = searchPage.Banner;
 }
+@if (banner != null)
+{
+    <div class="about-banner">
+        <img src="@(banner.GetCropUrl(1920,400, imageCropMode: ImageCropMode.Crop, furtherOptions: "&slimmage=true"))" alt="@Model.Content.Name">
+    </div>
+}
+else
+{
+    <div class="about-banner">
+        <img src="https://placehold.co/1920x400" alt="@Model.Content.Name">
+    </div>
+}
+<div class="mgb-30"></div>
+<h1 class="hidden-h1">@(home?.Value("metaTitle") ?? "")</h1>
+<h1 class="blog-title">@Model.Content.Name</h1>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-9 col-12 mx-auto">
+            @await Component.InvokeAsync("SearchResults", Model?.SearchResponse)
+
+            @await Component.InvokeAsync("Pagination", Model?.Pagination)
+        </div>
+    </div>
+</div>

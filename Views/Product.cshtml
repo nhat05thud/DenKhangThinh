@@ -1,9 +1,9 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @using Umbraco.Cms.Core.Models;
 @using DenKhangThinh.Helpers;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Product>
 @{
-    var relatedImages = Model.Value<IEnumerable<IPublishedContent>>("relatedImages") ?? null;
+    var relatedImages = Model.RelatedImages ?? null;
 }
 
 <div class="container">
@@ -35,17 +35,17 @@
             </div>
             <div class="item w-6/12">
                 <div class="price flex flex-wrap text-center">
-                    @if (Model.Value<decimal>("oldPrice") > 0)
+                    @if (Model.OldPrice > 0)
                     {
-                        <div class="price-item old-price">@Utils.ToVnd(Model.Value<decimal>("oldPrice"))</div>
+                        <div class="price-item old-price">@Utils.ToVnd(Model.OldPrice)</div>
                     }
-                    @if (Model.Value<int>("sale") > 0)
+                    @if (Model.Sale > 0)
                     {
-                        <div class="promotion">-@(Model.Value<int>("sale"))%</div>
+                        <div class="promotion">-@(Model.Sale)%</div>
                     }
-                    @if (Model.Value<decimal>("price") > 0)
+                    @if (Model.Price > 0)
                     {
-                        <div class="price-item new-price">@Utils.ToVnd(Model.Value<decimal>("price"))</div>
+                        <div class="price-item new-price">@Utils.ToVnd(Model.Price)</div>
                     }
                 </div>
             </div>
@@ -55,20 +55,20 @@
                 <div class="product-info">
                     <h1>@Model.Name</h1>
                     <div class="desc">
-                        @Model.Value("description")
+                        @Model.Description
                     </div>
                 </div>
                 <div class="product-size">
                     <h2>Thông số kích thước và cân nặng</h2>
                     @{
-                        var productSizes = Model.Value<IEnumerable<IPublishedElement>>("productSizes") ?? null;
+                        var productSizes = Model.ProductSizes ?? null;
                     }
                     @if (productSizes != null && productSizes.Any())
                     {
                         <ul class="reset-liststyle flex flex-wrap">
-                            @foreach (var item in productSizes)
+                            @foreach (ProductSize item in productSizes)
                             {
-                                <li><span>@item.Value("title"):</span>@item.Value("value")</li>
+                                <li><span>@item.Title:</span>@item.Value</li>
                             }
                         </ul>
                     }
@@ -76,18 +76,18 @@
                 <div class="product-material">
                     <h2>Chất liệu</h2>
                     @{
-                        var productMaterials = Model.Value<IEnumerable<IPublishedElement>>("productMaterials") ?? null;
+                        var productMaterials = Model.ProductMaterials ?? null;
                     }
                     @if (productMaterials != null && productMaterials.Any())
                     {
                         <div class="material-list">
-                            @foreach (var item in productMaterials)
+                            @foreach (ProductMaterial item in productMaterials)
                             {
-                                var images = item.Value<IEnumerable<IPublishedContent>>("images");
+                                var images = item.Images;
                                 <div class="item">
-                                    <h3>@item.Value("title")</h3>
+                                    <h3>@item.Title</h3>
                                     <div class="desc">
-                                        @item.Value("description")
+                                        @item.Description
                                     </div>
                                     @if (images != null && images.Any())
                                     {
@@ -97,7 +97,7 @@
                                                 <a href="@img.Url()">
                                                     <img src="@(img != null ? img.GetCropUrl(100, 100, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/100x100")"
                                                          class="w-full"
-                                                         alt="@item.Value("title")" />
+                                                         alt="@item.Title" />
                                                 </a>
                                             }
                                         </div>
@@ -110,7 +110,7 @@
             </div>
             <div class="item right w-6/12">
                 @{
-                    var imageDetail = Model.Value<IPublishedContent>("imageDetail");
+                    var imageDetail = Model.ImageDetail;
                 }
                 <h4>Tư vấn chi tiết</h4>
                 @await Html.PartialAsync("Layout/_ZaloSupport", Model)

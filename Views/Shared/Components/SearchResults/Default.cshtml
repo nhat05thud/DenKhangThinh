@@ -1,0 +1,17 @@
+﻿@inherits UmbracoViewPage<SearchResponseModel>
+@using DenKhangThinh.Models
+@using DenKhangThinh.Models.Search
+
+<div class="container">
+    <p style="margin-bottom: 60px;">Kết quả tìm kiếm: @Model?.TotalResultCount</p>
+    @if (Model?.HasResults ?? false)
+    {
+        <div class="product-list flex flex-wrap">
+            @foreach (var item in Model?.SearchResults)
+            {
+                var contentItem = Umbraco.Content(item.Id);
+                @await Html.PartialAsync("Layout/_ProductItem", new ProductViewModel { IsHome = true, Data = contentItem })
+            }
+        </div>
+    }
+</div>
