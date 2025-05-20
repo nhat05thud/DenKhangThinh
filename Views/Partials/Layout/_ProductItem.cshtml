@@ -19,7 +19,7 @@
             }
             <div class="img text-center">
                 <a href="@Model.Data?.Url()">
-                    <img src="@(img != null ? img.GetCropUrl(350, 200, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/350x200")" alt="@Model.Data?.Name" />
+                    <img src="@(img != null ? img.GetCropUrl(350, 350, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/350x350")" alt="@Model.Data?.Name" />
                 </a>
             </div>
             <div class="content">

@@ -3,123 +3,144 @@
 @using DenKhangThinh.Helpers;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Product>
 @{
+    var home = Umbraco.AssignedContentItem.Root();
     var relatedImages = Model.RelatedImages ?? null;
 }
-
 <div class="container">
-    <div class="product-page">
-        @if (relatedImages != null && relatedImages.Any())
-        {
-            <div class="main-product-slide owl-carousel">
-                @foreach (var item in relatedImages)
-                {
-                    <div class="item">
-                        <img src="@(item != null ? item.GetCropUrl(1250, 500, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/1250x500")" alt="@Model.Name" />
-                    </div>
-                }
-            </div>
-        }
-        <div class="detail-images flex flex-wrap align-item-center">
-            <div class="item w-6/12">
-                @if (relatedImages != null && relatedImages.Any())
-                {
-                    <div class="detail-product-slide owl-carousel">
-                        @foreach (var item in relatedImages)
-                        {
-                            <div class="item">
-                                <img src="@(item != null ? item.GetCropUrl(100, 100, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/100x100")" alt="@Model.Name" />
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-            <div class="item w-6/12">
-                <div class="price flex flex-wrap text-center">
-                    @if (Model.OldPrice > 0)
+    <div class="row">
+        <div class="col-12">
+            <div class="wd-breadcrumbs">
+                <nav class="woocommerce-breadcrumb">
+                    <a href="@home.Url()" class="breadcrumb-link">
+                        Trang chủ
+                    </a>
+                    @foreach (var ancestor in Model.Ancestors().Where(t => t.IsVisible()).OrderBy(x => x.Level).Where(x => x.Level > 1))
                     {
-                        <div class="price-item old-price">@Utils.ToVnd(Model.OldPrice)</div>
+                        <a href="@ancestor.Url()" class="breadcrumb-link">
+                            @ancestor.Name
+                        </a>
                     }
-                    @if (Model.Sale > 0)
-                    {
-                        <div class="promotion">-@(Model.Sale)%</div>
-                    }
-                    @if (Model.Price > 0)
-                    {
-                        <div class="price-item new-price">@Utils.ToVnd(Model.Price)</div>
-                    }
-                </div>
+                    <span class="breadcrumb-last">@Model.Name</span>
+                </nav>
             </div>
         </div>
-        <div class="detail-product-content flex flex-wrap">
-            <div class="item left w-6/12">
-                <div class="product-info">
-                    <h1>@Model.Name</h1>
-                    <div class="desc">
-                        @Model.Description
-                    </div>
-                </div>
-                <div class="product-size">
-                    <h2>Thông số kích thước và cân nặng</h2>
-                    @{
-                        var productSizes = Model.ProductSizes ?? null;
-                    }
-                    @if (productSizes != null && productSizes.Any())
-                    {
-                        <ul class="reset-liststyle flex flex-wrap">
-                            @foreach (ProductSize item in productSizes)
+        <div class="col-lg-6 col-12 col-md-6 product-images">
+            <div class="product-images-inner">
+                <div class="row">
+                    <div class="col-lg-9 order-lg-last">
+                        @if (Model.Sale > 0)
+                        {
+                            <div class="product-labels labels-rounded-sm"><span class="onsale product-label">-@(Model.Sale)%</span></div>
+                        }
+                        <div class="product-gallery__wrapper owl-carousel">
+                            @foreach (var img in relatedImages)
                             {
-                                <li><span>@item.Title:</span>@item.Value</li>
-                            }
-                        </ul>
-                    }
-                </div>
-                <div class="product-material">
-                    <h2>Chất liệu</h2>
-                    @{
-                        var productMaterials = Model.ProductMaterials ?? null;
-                    }
-                    @if (productMaterials != null && productMaterials.Any())
-                    {
-                        <div class="material-list">
-                            @foreach (ProductMaterial item in productMaterials)
-                            {
-                                var images = item.Images;
-                                <div class="item">
-                                    <h3>@item.Title</h3>
-                                    <div class="desc">
-                                        @item.Description
-                                    </div>
-                                    @if (images != null && images.Any())
-                                    {
-                                        <div class="list-material-images flex flex-wrap">
-                                            @foreach (var img in images)
-                                            {
-                                                <a href="@img.Url()">
-                                                    <img src="@(img != null ? img.GetCropUrl(100, 100, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/100x100")"
-                                                         class="w-full"
-                                                         alt="@item.Title" />
-                                                </a>
-                                            }
-                                        </div>
-                                    }
+                                <div class="product-image-wrap">
+                                    <figure class="product-gallery__image">
+                                        <a href="@img.Url()">
+                                            <img width="800" height="800" data-large_image_width="800" src="@(img != null ? img.GetCropUrl(800, 800, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/800x800")" alt="@Model.Name" />
+                                        </a>
+                                    </figure>
                                 </div>
                             }
                         </div>
-                    }
+                        <div class="product-additional-galleries">
+                            <div class="wd-show-product-gallery-wrap wd-action-btn wd-style-icon-bg-text wd-gallery-btn"><a data-fancybox="gallery" href="@relatedImages.First().Url()" rel="nofollow" class="woodmart-show-product-gallery"><span>Click to enlarge</span></a></div>
+                        </div>
+                        <div class="hidden">
+                            @foreach (var img in relatedImages.Skip(1))
+                            {
+                                <a data-fancybox="gallery" href="@img.Url()"></a>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-3 order-lg-first">
+                        <div class="thumbnails slick-slider">
+                            @foreach (var img in relatedImages)
+                            {
+                                <div class="product-image-thumbnail">
+                                    <img width="150" height="150" src="@(img != null ? img.GetCropUrl(150, 150, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true") : $"https://placehold.co/150x150")" alt="@Model.Name" />
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="item right w-6/12">
-                @{
-                    var imageDetail = Model.ImageDetail;
-                }
-                <h4>Tư vấn chi tiết</h4>
-                @await Html.PartialAsync("Layout/_ZaloSupport", Model)
-                @if (imageDetail != null)
+        </div>
+        @{
+            var productSizes = Model.ProductSizes ?? null;
+        }
+        <div class="col-lg-6 col-12 col-md-6 text-left summary entry-summary">
+            <div class="summary-inner set-mb-l reset-last-child">
+                <h1 class="product_title wd-entities-title">@Model.Name</h1>
+                <p class="price">
+                    @if (Model.OldPrice > 0)
+                    {
+                        <del class="strike"><span class="amount"><bdi>@Utils.ToVnd(Model.OldPrice)</bdi></span></del>
+                    }
+                    @if (Model.Price > 0)
+                    {
+                        <ins class="highlight"><span class="amount"><bdi>@Utils.ToVnd(Model.Price)</bdi></span></ins>
+                    }
+                </p>
+                @if (productSizes != null && productSizes.Any())
                 {
-                    <a href="@imageDetail.Url()">
-                        <img src="@(imageDetail.GetCropUrl(500, 500, imageCropMode: ImageCropMode.Crop, imageCropAnchor: ImageCropAnchor.Center, furtherOptions: "&slimmage=true"))" class="w-full" alt="@Model.Name" />
-                    </a>
+                    <table class="woocommerce-product-attributes shop_attributes">
+                        <tbody>
+                            @foreach (ProductSize item in productSizes)
+                            {
+                                <tr class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_bao-hanh">
+                                    <th class="woocommerce-product-attributes-item__label">
+                                        <span class="wd-attr-name">@item.Title</span>
+                                    </th>
+                                    <td class="woocommerce-product-attributes-item__value">
+                                        <p>@item.Value</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
+                <div class="flexhouse-btn-wrap">
+                    <a class="btn btn-4 btn-sep icon-send" target="_blank" href="@home?.Value("zaloLink")" style="background-color: rgb(162, 128, 21); color: rgb(255,255,255)">
+                        <div class="icon">
+                            <img width="40" height="40" src="/images/zalo-icon-1.png">
+                        </div>
+                        <span> &nbsp;Chat Zalo</span>
+                    </a>
+                    <a class="btn btn-4 btn-sep icon-send" target="_blank" href="tel:@home?.Value("phoneNumber")" style="background-color: rgb(162, 128, 21); color: rgb(255,255,255)">
+                        <div class="icon">
+                            <img width="40" height="40" src="/images/logo-cuoc-goi-new.png">
+                        </div><span>&nbsp;Gọi cho tôi</span>
+                    </a>
+                </div>
+                @* <div class="product_meta">
+                    <span class="sku_wrapper">
+                        <span class="meta-label">
+                            Mã:
+                        </span>
+                        <span class="sku">
+                            ZHS9013
+                        </span>
+                    </span>
+
+                    <span class="posted_in"><span class="meta-label">Danh mục:</span> <a href="https://flexhouse.vn/den-trang-tri" rel="tag">Đèn trang trí</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/den-nang-luong-mat-troi" rel="tag">Đèn năng lượng mặt trời</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/den-trang-tri-ngoai-troi" rel="tag">Đèn trang trí ngoài trời</a></span>
+                    <span class="tagged_as"><span class="meta-label">Từ khóa:</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/cot-den-chieu-sang" rel="tag">Cột đèn chiếu sáng</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/cot-den-nang-luong-mat-troi" rel="tag">Cột đèn năng lượng mặt trời</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/cot-den-san-vuon" rel="tag">Cột đèn sân vườn</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-chieu-sang-canh-quan" rel="tag">Đèn chiếu sáng cảnh quan</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-chieu-sang-nang-luong-mat-troi" rel="tag">Đèn chiếu sáng năng lượng mặt trời</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-chieu-sang-ngoai-troi" rel="tag">Đèn chiếu sáng ngoài trời</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-cot" rel="tag">Đèn cột</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-cot-ngoai-troi" rel="tag">Đèn cột ngoài trời</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-cot-san-vuon" rel="tag">Đèn cột sân vườn</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-cot-trang-tri" rel="tag">Đèn cột trang trí</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-ngoai-troi" rel="tag">Đèn ngoài trời</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/den-trang-tri-ngoai-san" rel="tag">Đèn trang trí ngoài sân</a><span class="meta-sep">,</span> <a href="https://flexhouse.vn/tu-khoa-san-pham/tru-den-chieu-sang" rel="tag">Trụ đèn chiếu sáng</a></span>
+                </div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="wrap-content-title">
+                    <span>Mô tả</span>
+                </div>
+                <div class="wrap-content">
+                    @Model.Description
+                </div>
             </div>
         </div>
     </div>

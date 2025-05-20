@@ -4,7 +4,7 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Home>
 
 <h1 class="hidden-h1">@(Model.MetaTitle ?? "")</h1>
-@await Html.PartialAsync("Home/_HomeBanner")
+@* @await Html.PartialAsync("Home/_HomeBanner") *@
 @await Html.PartialAsync("Home/_HighLightProducts")
 @await Html.PartialAsync("Home/_Categories")
 @await Html.PartialAsync("Home/_Packages")

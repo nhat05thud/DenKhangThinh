@@ -1,4 +1,8 @@
 @font-face {
+    font-family: "woodmart-font";
+    src: url("/fonts/woodmart-font-1-400.woff2") format("opentype");
+}
+@font-face {
   font-family: "SegoeUI";
   font-weight: 900;
   src: url("/fonts/SegoeUI/SegoeUIBlack.ttf") format("opentype");
